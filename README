@@ -1,0 +1,4 @@
+Elastic Pony is a collection of scripts designed to simplify the deployment of common Django applications to AWS.
+
+The initial version of these scripts came from the Deploying Web Applications to the Cloud tutorial at PyCon 2011
+http://us.pycon.org/2011/schedule/presentations/149/
