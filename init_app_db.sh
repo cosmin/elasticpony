@@ -9,9 +9,11 @@ Usage: $SCRIPT_NAME OPTIONS
 
 Required:
  -D DATABASE_NAME        the database name
- -l URL                  url for a tgz-ed sql dump to load into db
+
 
 Optional:
+ -l URL                  url for a tgz-ed sql dump to load into db
+
  -U DATABASE_USER        the database user. Defaults to DATABASE_NAME
  -P DATABASE_PASSWORD    the database password. Defaults to autogenerate
 EOF
@@ -50,10 +52,6 @@ while getopts "hD:U:P:l:" opt; do
     esac
 done
 
-if [ -z "$URL" ]; then
-    die "URL is required" 1
-fi
-
 if [ -z "$DATABASE_NAME" ]; then
     die "DATABASE_NAME is required" 2
 fi
@@ -84,7 +82,11 @@ EOF
 }
 
 load_sql() {
-    wget $URL -O dump.sql.tgz && tar zxvf dump.sql.tgz && mysql --user=$DATABASE_USER --password=$DATABASE_PASSWORD $DATABASE_NAME < dump.sql
+    if [ -n "$URL" ]; then
+        wget $URL -O dump.sql.tgz && tar zxvf dump.sql.tgz && mysql --user=$DATABASE_USER --password=$DATABASE_PASSWORD $DATABASE_NAME < dump.sql
+    else
+        echo "No url specified. Creating an empty database, up to you to create the schema."
+    fi
 }
 
 print_mysql_config() {
